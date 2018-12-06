@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <link href="https://vjs.zencdn.net/7.3.0/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/7.3.0/video.js"></script>
+    <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+    <script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script>
+    <!--下面用于引入bootStrap样式-->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!--引入boootBox-->
+    <script src="https://cdn.bootcss.com/bootbox.js/4.4.0/bootbox.js"></script>
+    <!--引入bootstrap-select-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/i18n/defaults-*.min.js"></script>
+    <!--引入下拉菜单样式-->
+    <link rel="stylesheet" href="css/dropdown-submenu.css">
+    <!--引入发送ajax-->
+    <script src="js/sendAjax.js"></script>
+    <!--引入发送ajax2-->
+    <script src="js/ajax.js"></script>
+    <!--引入弹出公共模态框-->
+    <script src="js/openModel.js"></script>
+    <!--引入点击查看自动播放插件-->
+    <script src="js/playvideo.js"></script>
+    <!--引入更换视频源插件-->
+    <script src="js/changeVideoResource.js"></script>
+    <!--引入自动播放并关闭模态框插件-->
+    <script src="js/playAllKindOfvideoAndCoseModel.js"></script>
+
+    <style>
+        .video {
+            padding-top: 5%;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+        
+        body {
+            background: url(img/background_login.jpg);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 综合的模态框 -->
+    <div class="modal fade" id="changeVideoModel_Common" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel_Common"></h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead id="thead_Score">
+                            <tr>
+                                <th>视频名</th>
+                                <th>点击播放</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_Common">
+
+                        </tbody>
+                        <tfoot id="tfoot_Common"></tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="Close">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- 在线翻译的模态框 -->
+    <div class="modal fade" id="changeVideoModel_Translate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="myModalLabel_Score">在线翻译</h3>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputAmount"><span style="font-family:STXingkai"><span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">$</div>
+                                <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
+                                <div class="input-group-addon">
+                                    <select id="langunage_select">
+                                        <option value="zh">中文</option>
+                                        <option value="en">英文</option>
+                                        <option value="ca">加拿大</option>
+                                        <option value="es">西班牙</option>
+                                        <option value="it">意大利</option>
+                                        <option value="ja">日语</option>
+                                        <option value="ru">俄语</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="translate_submit(event)">Transfer cash</button>
+                    </form>
+                    <textarea disabled="disabled" rows="5" cols="32" id="translateResult" style="font-size:24px;color:white;font-family:Arial;font-weight:bold;background-color: gray">
+                       
+                    </textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="Close">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- 更换Gusn视频的模态框 -->
+    <div class="modal fade" id="changeVideoModel_Guns" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel_Score">英语</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead id="thead_Score">
+                            <tr>
+                                <th>视频名</th>
+                                <th>点击播放</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_Guns">
+
+                        </tbody>
+                        <tfoot id="tfoot_Guns"></tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="Close">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- 更换英语视频的模态框 -->
+    <div class="modal fade" id="changeVideoModel_English" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel_Score">英语</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead id="thead_Score">
+                            <tr>
+                                <th>视频名</th>
+                                <th>点击播放</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_English">
+
+                        </tbody>
+                        <tfoot id="tfoot_English"></tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="Close">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- 更换卡通视频的模态框 -->
+    <div class="modal fade" id="changeVideoModel_Carton" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel_Score">动画片</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead id="thead_Score">
+                            <tr>
+                                <th>视频名</th>
+                                <th>点击播放</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_Score">
+
+                        </tbody>
+                        <tfoot id="tfoot_score"></tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="Close">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <nav class="navbar navbar-default  navbar-fixed-top navbar-inverse">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <span style="font-size:30px;font-style: STXingkai">致一传媒</span>
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left" action="http://localhost:1234/zhiyi/forward" target="_blank">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="暂不支持中文搜索" id="input_search" name="input_search">
+                    </div>
+                    <button type="submit" class="btn btn-default" id="search">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-center">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">功能
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="translate">在线翻译</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="文件上传/bootstrap-fileinput-master/html/inde.html" id="upload">视频上传</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#" id="download">视频下载</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-ri" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">选择视频
+                                    </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="cartoon">动画片</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="English">英语</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="guns">guns系列教程</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="advertise">广告宣传</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="movies">电影</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="music">音乐</a></li>
+                                </ul>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-ri" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">播放速度
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="a1" data-speed="0.5" class=".speed">0.5倍</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="aa1" data-speed="1" class=".speed">1倍</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="a2" data-speed="1.5" class=".speed">1.5倍</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="a3" data-speed="2.0" class=".speed">2.0倍</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="a4" data-speed="2.5" class=".speed">2.5</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" id="a5" data-speed="3.0" class=".speed">3.0倍</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+
+
+
+
+    <div class="container-fluid video">
+        <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls preload="auto" poster="img/Poster1.jpg" data-setup="{}">
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/mp4'>
+            <source src="http://sf.sycdn.kuwo.cn/resource/n2/35/0/169146886.mp3" type="audio/mpeg">
+            <source src="OggAudio" type='audio/ogg'>
+            <source src="WavAudio" type='audio/wav'>
+            <source src="my_video.webm" type="video/webm">
+            <source src="my_video.webm" type="video/ogg">
+            <source src="my_video.webm" type="video/mkv">
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+        </video>
+
+    </div>
+    <script>
+        var video = document.getElementById('my-video');
+        $("#videoAddress").change(function() {
+
+
+                var vdideoUrl = $('select').val();
+                changeVideo(vdideoUrl);
+            })
+            //用于播放视频
+        function changeVideo(url) {
+            var Player = videojs("my-video"); //初始化视频(里面是video的id)
+            Player.src(url); //重置video的src
+            Player.load(url); //使video重新加载
+        }
+        //实现播放按钮的功能
+        function play() {
+            var myPlayer = videojs("my-video"); //初始化视频(里面是video的id)
+            myPlayer.play();
+        }
+        //用于打开卡通模态框
+        $("#cartoon").click(function() {
+            //此处弹出模态框
+
+            $.ajax({
+                url: "http://localhost:1234/zhiyi/getcartoon",
+                type: "get",
+                success: function(data) {
+                    $("#tbody_Score").text(" ");
+                    $.each(data.cartoons, function(index, data) {
+                        console.log(data)
+                        $("#tbody_Score").append("<tr id=tr_Cartton" + index + "><tr>");
+                        $("#tr_Cartton" + index).append("<td>" + data.name + "<td>")
+                        $("#tr_Cartton" + index).append("<td><button class='btn btn -default detail' type='submit' id='" + data.url + "'>点击观看</button><td>")
+                    });
+                }
+            });
+            $('#changeVideoModel_Carton').modal({
+                backdrop: "static"
+            })
+        })
+        $(document).on("click", ".detail", function() {
+                var url = $(this).attr("id");
+                console.log(url);
+                $('#changeVideoModel_Carton').modal("hide");
+                changeVideo(url);
+                play();
+            })
+            //用于打开英语模态框
+        $("#English").click(function() {
+            //此处弹出模态框
+
+            $.ajax({
+                url: "http://localhost:1234/zhiyi/getEnglish",
+                type: "get",
+                success: function(data) {
+                    $("#tbody_English").text(" ");
+                    $.each(data.cartoons, function(index, data) {
+                        console.log(data)
+                        $("#tbody_English").append("<tr id=tr_English" + index + "><tr>");
+                        $("#tr_English" + index).append("<td>" + data.name + "<td>")
+                        $("#tr_English" + index).append("<td><button class='btn btn -default detail' type='submit' id='" + data.url + "' data-sig='changeVideoModel_English'>点击观看</button><td>")
+                    });
+                }
+            });
+            $('#changeVideoModel_English').modal({
+                backdrop: "static"
+            })
+        })
+        $(document).on("click", ".detail", function() {
+                var url = $(this).attr("id");
+                var model_Name = $(this).attr("data-sig");
+                console.log(url);
+                $("#changeVideoModel_English").modal("hide");
+                changeVideo(url);
+                play();
+            })
+            //用于弹出guns模态框
+        sendAjax("guns", "http://localhost:1234/zhiyi/getGuns", "tbody_Guns", "changeVideoModel_Guns")
+
+        //用于将视频源解析并进行播放
+        $(document).on("click", ".detail", function() {
+                var url = $(this).attr("id");
+                console.log(url);
+                $("#changeVideoModel_Guns").modal("hide");
+                changeVideo(url);
+                play();
+            })
+            //用于实现视频下载
+        $("#download").click(function() {
+                var dialog = bootbox.dialog({
+                    title: '致一传媒提示您：',
+                    message: '<p><i class="fa fa-spin fa-spinner"></i>资源加载中...</p>'
+                });
+                dialog.init(function() {
+                    setTimeout(function() {
+                        dialog.find('.bootbox-body').html('资源准备完毕-------请按照以下步骤进行操作：右单击播放窗口->视频另存为');
+                    }, 3000);
+                });
+            })
+            //用于弹出在线翻译模态框
+        $("#translate").click(function() {
+                //此处弹出模态框
+                $('#changeVideoModel_Translate').modal({
+                    backdrop: "static"
+                })
+            })
+            //实现翻译的功能
+        function translate_submit(e) {
+            var cotent = $("#exampleInputAmount").val();
+            var langunage = $("#langunage_select").val();
+            var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20181111T115634Z.a26b275c72ad9f9f.9b5c1e7d6c8fd92b6f269d7fa2843a8c4a07f1be&text=" + cotent + "&lang=" + langunage + "";
+            $.ajax({
+                url: url,
+                type: "get",
+                success: function(data) {
+                    console.log(data);
+                    var trsRe = data.text[0];
+                    $("#translateResult").text(trsRe)
+                },
+                error: function() {
+                    console.log("请求失败");
+                    return "request fail"
+                }
+            });
+            e.preventDefault();
+        }
+        //弹出宣传模态框
+        opencommonModel("advertise", "http://localhost:1234/zhiyi/getadversize");
+        playVideo("changeVideoModel_Common");
+        //弹出movies模态框
+        opencommonModel("movies", "http://localhost:1234/zhiyi/getMovies");
+        playAllKindOfvideoAndCoseModel("detail");
+        //用于弹出播放音乐模态框
+        opencommonModel("music", "http://localhost:1234/zhiyi/getmusic");
+        //用于播放音乐以及自动关闭模态框
+        playAllKindOfvideoAndCoseModel("detail");
+        //更改播放速度
+        function speed(spe) {
+            video.playbackRate = spe;
+            video.play();
+        }
+        $("#a1").click(function() {
+            var spe = $(this).attr("data-speed");
+            speed(spe)
+        })
+        $("#a2").click(function() {
+            var spe = $(this).attr("data-speed");
+            speed(spe)
+        })
+        $("#a3").click(function() {
+            var spe = $(this).attr("data-speed");
+            speed(spe)
+        })
+        $("#a4").click(function() {
+            var spe = $(this).attr("data-speed");
+            speed(spe)
+        })
+        $("#a5").click(function() {
+            var spe = $(this).attr("data-speed");
+            speed(spe)
+        })
+        $("#aa1").click(function() {
+            var spe = $(this).attr("data-speed");
+            speed(spe)
+        })
+    </script>
+</body>
+
+</html>

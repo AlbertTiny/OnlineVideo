@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boot.zhiyi.mapper.CityMapper">
+	<resultMap id="BaseResultMap" type="com.boot.zhiyi.Po.CityPo">
+		<result column="id" property="id" />
+		<result column="province_id" property="province_id" />
+		<result column="city_name" property="city_name" />
+		<result column="description" property="description" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, province_id, city_name, description
+	</sql>
+
+	<select id="getCityInfoByName" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from city
+		where city_name like CONCAT(CONCAT('%',#{city_name}),'%')
+	</select>
+
+</mapper>

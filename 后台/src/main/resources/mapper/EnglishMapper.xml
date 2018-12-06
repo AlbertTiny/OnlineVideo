@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boot.zhiyi.mapper.EnglishMapper">
+	<select id="getEnglish" resultType="com.boot.zhiyi.Po.EnglishPo">
+	select * from EngLish
+	</select>
+
+</mapper>
