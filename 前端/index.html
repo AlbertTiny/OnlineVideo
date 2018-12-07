@@ -436,6 +436,7 @@
             })
             //实现翻译的功能
         function translate_submit(e) {
+
             var cotent = $("#exampleInputAmount").val();
             var langunage = $("#langunage_select").val();
             var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20181111T115634Z.a26b275c72ad9f9f.9b5c1e7d6c8fd92b6f269d7fa2843a8c4a07f1be&text=" + cotent + "&lang=" + langunage + "";
@@ -452,7 +453,7 @@
                     return "request fail"
                 }
             });
-            e.preventDefault();
+
         }
         //弹出宣传模态框
         opencommonModel("advertise", "http://localhost:1234/zhiyi/getadversize");

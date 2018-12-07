@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>滑动菜单</title>
+
+    <!--下面用于引入bootStrap样式-->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/body.css" />
+</head>
+
+<body>
+    <div class="box">
+
+        <div class="box-center">
+
+            <!-- 侧滑菜单 -->
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+                    <ul class="nav sidebar-nav">
+                        <li class="sidebar-brand">
+                            <a href="#">
+
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="home"><i class="fa fa-fw fa-home"></i> Home</a>
+                        </li>
+                        <li>
+                            <a href="#" id="aa"><i class="fa fa-fw fa-folder"></i> Page one</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-file-o"></i> Second page</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-cog"></i> Third page</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>
+                    Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="dropdown-header">Dropdown heading</li>
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-bank"></i> Page four</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-dropbox"></i> Page 5</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-twitter"></i> Last page</a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /#sidebar-wrapper -->
+
+                <!-- Page Content -->
+                <div id="page-content-wrapper">
+                    <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
+            <span class="hamb-top"></span>
+            <span class="hamb-middle"></span>
+            <span class="hamb-bottom"></span>
+        </button>
+
+                    <div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- /#page-content-wrapper -->
+            </div>
+        </div>
+    </div>
+    <div class="box-center-right" id="right">
+        <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls preload="auto" poster="img/Poster1.jpg" data-setup="{}">
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/mp4'>
+            <source src="http://sf.sycdn.kuwo.cn/resource/n2/35/0/169146886.mp3" type="audio/mpeg">
+            <source src="OggAudio" type='audio/ogg'>
+            <source src="WavAudio" type='audio/wav'>
+            <source src="my_video.webm" type="video/webm">
+            <source src="my_video.webm" type="video/ogg">
+            <source src="my_video.webm" type="video/mkv">
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+        </video>
+    </div>
+</body>
+<script src="../js/function.js"></script>
+<script>
+    $("#aa").click(function() {
+        alert("aaaaaaaaa")
+        $("#right").empty();
+        $("#right").append("<table><tr><td>aaaaa</td></tr></table>");
+    })
+    $("#home").click(function() {
+        alert("home")
+        $("#right").empty();
+        $("#right").append("<video id='my-video' class='video - js vjs -default -skin vjs - big - play - centered vjs - fluid' controls preload='auto' poster='img / Poster1.jpg' data-setup='{}''></video>");
+        $("#my-video").append("<source src='http://media.w3.org/2010/05/sintel/trailer.mp4' type='video/mp4'>");
+        $("#my-video").append("<source src='http://media.w3.org/2010/05/sintel/trailer.mp4' type='video/mp4'>");
+        $("#my-video").append("<source src='http://sf.sycdn.kuwo.cn/resource/n2/35/0/169146886.mp3' type='audio/mpeg'>");
+        $("#my-video").append("<source src='OggAudio' type='audio/ogg'>");
+        $("#my-video").append("<source src='OggAudio' type='video/mkv'>");
+        $("#my-video").append("<p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>");
+
+    })
+</script>
+
+</html>
