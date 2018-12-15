@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>滑动菜单</title>
+    <title>在线视频</title>
 
     <link href="https://vjs.zencdn.net/7.3.0/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/7.3.0/video.js"></script>
@@ -41,6 +41,8 @@
     <script src="../js/playAllKindOfvideoAndCoseModel.js"></script>
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/body.css" />
+    <!--引入显示youtube列表的插件-->
+    <script src="../js/showYoutubube.js"></script>
     <style>
         body {
             background: url(../img/background_login.jpg);
@@ -49,7 +51,6 @@
             background-attachment: fixed;
             background-size: cover;
         }
-      
     </style>
 </head>
 
@@ -187,12 +188,24 @@
                                 <li><a href="#" id="advertise">广告宣传</a></li>
                                 <li><a href="#" id="movies">电影</a></li>
                                 <li><a href="#" id="music">音频</a></li>
+                                <li><a href="#" id="YoutubeVideo">优酷视频</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#" id="otherTools"><i class="fa fa-fw fa-bank"></i>更多功能</a>
+                            <a href="#" id="crawYoutube"><i class="fa fa-fw fa-bank"></i>爬取优酷视频</a>
                         </li>
-                        
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>
+                               更多功能 <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="dropdown-header">Dropdown heading</li>
+                                <li><a href="http://localhost:1234/zhiyi/druid" id="durid" target="_blank"><i class="fa fa-fw fa-bank"></i>查看durid连接情况</a></li>
+                                <li><a href="#" id="otherTools"><i class="fa fa-fw fa-bank"></i>关于我们</a></li>
+
+                            </ul>
+                        </li>
+
+
                     </ul>
                 </nav>
                 <!-- /#sidebar-wrapper -->
@@ -216,8 +229,8 @@
             </div>
         </div>
     </div>
-    <div class="box-center-right" id="right"> 
-     
+    <div class="box-center-right" id="right">
+
         <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls preload="auto" poster="../img/Poster1.jpg" data-setup="{}">
             <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/mp4'>
             <source src="http://sf.sycdn.kuwo.cn/resource/n2/35/0/169146886.mp3" type="audio/mpeg">
@@ -236,7 +249,7 @@
 <script src="../js/function.js"></script>
 <script src="../js/util.js"></script>
 <script>
-    var  videoTep;
+    var videoTep;
     //用于弹出在线翻译模态框
     $("#translate").click(function() {
         //此处弹出模态框
@@ -278,10 +291,10 @@
             });
         })
         //用于实现点击主菜单的功能
-        $("#home").click(function(){
-            showVideo("home");
-        })
-    
+    $("#home").click(function() {
+        showVideo("home");
+    })
+
     //用于打开动画片
     openSelectMovies("cartoon", "http://localhost:1234/zhiyi/getcartoon");
     //用于打开英语选择界面
@@ -290,45 +303,70 @@
     openSelectMovies("guns", "http://localhost:1234/zhiyi/getGuns");
     //用于打开广告宣传界面
     openSelectMovies("advertise", "http://localhost:1234/zhiyi/getadversize");
-     //用于打开电影界面
+    //用于打开电影界面
     openSelectMovies("movies", "http://localhost:1234/zhiyi/getMovies");
     //用于选择音频界面
     openSelectMovies("music", "http://localhost:1234/zhiyi/getmusic");
     playvideo("detail");
-    
+
     //用于实现打开巨幕的功能
-       $("#otherTools").click(function(){
+    $("#otherTools").click(function() {
         $("#right").empty();
-      $("#right").append("<div class='jumbotron' id='jumbotron'></div>");
+        $("#right").append("<div class='jumbotron' id='jumbotron'></div>");
         $("#jumbotron").append("<h1>Hello, world!</h1>");
         $("#jumbotron").append("<p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>");
         $("#jumbotron").append(" <p><a class='btn btn-primary btn-lg' href='#' role='button'>Learn more</a></p>");
     })
-      $("#a1").click(function() {
+    $("#a1").click(function() {
+        var spe = $(this).attr("data-speed");
+
+        speed(spe)
+    })
+    $("#a2").click(function() {
+        var spe = $(this).attr("data-speed");
+        speed(spe)
+    })
+    $("#a3").click(function() {
+        var spe = $(this).attr("data-speed");
+        speed(spe)
+    })
+    $("#a4").click(function() {
+        var spe = $(this).attr("data-speed");
+        speed(spe)
+    })
+    $("#a5").click(function() {
+        var spe = $(this).attr("data-speed");
+        speed(spe)
+    })
+    $("#aa1").click(function() {
             var spe = $(this).attr("data-speed");
-            
             speed(spe)
         })
-        $("#a2").click(function() {
-            var spe = $(this).attr("data-speed");
-            speed(spe)
+        //用于实现爬取优酷视频
+    $("#crawYoutube").click(function() {
+            $.ajax({
+                url: "http://localhost:1234/zhiyi/saveYoutube",
+                type: "get",
+                success: function(data) {
+                    var dialog = bootbox.dialog({
+                        title: '致一传媒提示您：',
+                        message: '<p><i class="fa fa-spin fa-spinner"></i>资源爬取中...</p>'
+                    });
+                    dialog.init(function() {
+                        setTimeout(function() {
+                            dialog.find('.bootbox-body').html('资源爬取完毕-------共新增视频【' + data.insertNumber + "】条数据");
+                        }, 3000);
+                    });
+                },
+                error: function() {
+                    alert("资源爬取失败")
+                }
+            });
         })
-        $("#a3").click(function() {
-            var spe = $(this).attr("data-speed");
-            speed(spe)
-        })
-        $("#a4").click(function() {
-            var spe = $(this).attr("data-speed");
-            speed(spe)
-        })
-        $("#a5").click(function() {
-            var spe = $(this).attr("data-speed");
-            speed(spe)
-        })
-        $("#aa1").click(function() {
-            var spe = $(this).attr("data-speed");
-            speed(spe)
-        })
+        //显示优酷视频播放列表
+    $("#YoutubeVideo").click(function() {
+        showYoutubeList();
+    })
 </script>
 
 </html>
