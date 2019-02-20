@@ -12,6 +12,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,7 @@ import com.boot.zhiyi.service.YouTubeService;
 public class SaveYoutubeController {
 	@Autowired
 	YouTubeService YouTubeService;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@ResponseBody
 	@RequestMapping(value="/saveYoutube",method=RequestMethod.GET)
 	public Map<String, Object> saveYoutube(HttpServletResponse response) throws IOException {
@@ -54,6 +57,7 @@ public class SaveYoutubeController {
 			}
 			
 		}
+		logger.info("添加了"+count+"条信息");
 		map.put("insertNumber", count);
 		return map;
 	}

@@ -1,13 +1,6 @@
-//用于打开视频选择界面
-function showYoutubeList(pn) {
-    //用于打开卡通模态框
-    //此处弹出模态框
-    var currentPageNumber;
-    var allPages;
-    var searchValue;
-    var selectValue;
+function showList(pn, url, url2) {
     $.ajax({
-        url: "http://localhost:1234/zhiyi/getYoutube",
+        url: url,
         data: "pn=" + pn,
         type: "get",
         success: function(data) {
@@ -68,67 +61,99 @@ function showYoutubeList(pn) {
 
         }
     });
+    pg(url); //实现点击翻译功能
+    searchByPage(url); //跳转指定页码
+    getSelection(url, url2);
+}
+//页码功能
+function pg(url) {
+    //实现点击翻页的功能
     $(document).on("click", "#pnNu", function() {
         var pn = $(this).attr("data-pn");
-        showYoutubeList(pn)
-    })
+        showList(pn, url)
+    });
+    //实现点击上一页的功能
     $(document).on("click", "#previous", function() {
         var pn = currentPageNumber - 1;
         if (pn <= 0) {
             return false;
         } else {
-            showYoutubeList(pn)
+            showList(pn, url)
         }
-    })
+    });
+    //实现点击下一页的功能
     $(document).on("click", "#next", function() {
-            var pn = currentPageNumber + 1;
-            if (pn > allPages) {
-                return false;
-            } else {
-                showYoutubeList(pn)
-            }
-        })
-        //获取输入框中的值
+        var pn = currentPageNumber + 1;
+        if (pn > allPages) {
+            return false;
+        } else {
+            showList(pn, url)
+        }
+    });
+
+}
+//跳转指定页码
+function searchByPage(url) {
+    //获取输入框中的值
+    var searchValue;
     $(document).on("change", "#exampleInputAmount", function() {
         searchValue = this.value;
-        console.log("searchValue=" + searchValue)
-    })
+        console.log("searchValue=" + searchValue);
+    });
+    showList(searchValue, url)
+}
+
+
+
+
+//用于实现选择框的选择
+function getSelection(url, url2) {
     $(document).on("change", "#select", function() {
-            selectValue = $(this).val();
-            if (selectValue == 'pnSearch') {
-                $(document).on("click", "#btnSearch", function() {
-                    showYoutubeList(searchValue);
-                })
-            } else if (selectValue == 'nameSearch') {
-                $(document).on("click", "#btnSearch", function() {
-                    $.ajax({
-                        url: "http://localhost:1234/zhiyi/getYoutubeByName",
-                        data: "name=" + searchValue,
-                        type: "get",
-                        success: function(data) {
-                            $("#right").empty();
-                            $("#right").append("<ol class='breadcrumb '>  <li><a href='#' id='searchHome'>Home</a></li><li class='active'>查询结果</li></ol>");
-                            $("#right").append("<table class='table table-hover' id='table'></table>");
-                            $("#table").append("<thead id='thead_Score'></thead>");
-                            $("#thead_Score").append("<tr id='th_tr'></tr>");
-                            $("#th_tr").append("<th style='text-align:center'><span style='color:red'>视频名</span></th>");
-                            $("#th_tr").append("<th style='text-align:center'><span style='color:red'>       </span></th>");
-                            $("#th_tr").append("<th style='text-align:center'><span style='color:red'>点击播放</span></th>");
-                            $("#table").append("<tbody id='tbody_Score'></tbody>");
-                            $.each(data.cartoons, function(index, item) {
-                                $("#tbody_Score").append("<tr id=tr_Cartton" + index + "><tr>");
-                                $("#tr_Cartton" + index).append("<td style='color:gray'>" + item.name + "<td>")
-                                $("#tr_Cartton" + index).append("<td><a href='" + item.url + "' class='btn btn -default youtube' type='submit' id='" + item.url + "' target='_blank'>点击观看</a><td>");
+        searchValue = this.value;
+        if (searchValue == 'other') {
+            alert("请选择一项查询条件");
 
-                            })
-                        }
-                    });
-                })
+        }
+        if (searchValue == 'pnSearch') {
+            $(document).on("click", "#btnSearch", function() {
+                //获取输入框中的值
+                var searchValue;
+                $(document).on("change", "#exampleInputAmount", function() {
+                    searchValue = this.value;
+                    console.log("searchValue=" + searchValue);
+                });
+                showList(searchValue, url);
+            })
+        }
+        if (searchValue == 'nameSearch') {
+            $(document).on("click", "#btnSearch", function() {
+                $.ajax({
+                    url: url2,
+                    data: "name=" + searchValue,
+                    type: "get",
+                    success: function(data) {
+                        $("#right").empty();
+                        $("#right").append("<ol class='breadcrumb '>  <li><a href='#' id='searchHome'>Home</a></li><li class='active'>查询结果</li></ol>");
+                        $("#right").append("<table class='table table-hover' id='table'></table>");
+                        $("#table").append("<thead id='thead_Score'></thead>");
+                        $("#thead_Score").append("<tr id='th_tr'></tr>");
+                        $("#th_tr").append("<th style='text-align:center'><span style='color:red'>视频名</span></th>");
+                        $("#th_tr").append("<th style='text-align:center'><span style='color:red'>       </span></th>");
+                        $("#th_tr").append("<th style='text-align:center'><span style='color:red'>点击播放</span></th>");
+                        $("#table").append("<tbody id='tbody_Score'></tbody>");
+                        $.each(data.cartoons, function(index, item) {
+                            $("#tbody_Score").append("<tr id=tr_Cartton" + index + "><tr>");
+                            $("#tr_Cartton" + index).append("<td style='color:gray'>" + item.name + "<td>")
+                            $("#tr_Cartton" + index).append("<td><a href='" + item.url + "' class='btn btn -default youtube' type='submit' id='" + item.url + "' target='_blank'>点击观看</a><td>");
 
-            }
-        })
-        //返回原来界面
-    $(document).on("click", "#searchHome", function() {
-        showYoutubeList(1)
-    })
+                        })
+                    }
+                });
+                //返回原来界面
+                $(document).on("click", "#searchHome", function() {
+                    showList(1, url1);
+                })
+            })
+        }
+    });
 }

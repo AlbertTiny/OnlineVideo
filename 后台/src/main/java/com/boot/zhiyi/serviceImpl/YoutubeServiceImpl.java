@@ -37,6 +37,11 @@ public class YoutubeServiceImpl implements YouTubeService {
 		// TODO Auto-generated method stub
 		return YoutubeMapper.getYoutube();
 	}
+	@Override
+	public List<Youtube> getYoutubeLikeName(String name) {
+		// TODO Auto-generated method stub
+		return YoutubeMapper.getYoutubeLikeName(name);
+	}
 	
 
 }

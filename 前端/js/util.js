@@ -1,7 +1,8 @@
 //用于添加视频dom结点
 function addVideo() {
     $("#right").empty();
-    $("#right").append("<video id='my-video' class='video - js vjs -default -skin vjs - big - play - centered vjs - fluid fill' controls preload='auto' poster='img / Poster1.jpg' data-setup='{}''></video>");
+
+    $("#right").append("<video id='my-video' class=' video - js vjs -default -skin vjs - big - play - centered vjs - fluid fill' controls preload='auto' poster='img / Poster1.jpg' data-setup='{}''></video>");
     $("#my-video").append("<source src='http://media.w3.org/2010/05/sintel/trailer.mp4' type='video/mp4'>");
     $("#my-video").append("<source src='http://media.w3.org/2010/05/sintel/trailer.mp4' type='video/mp4'>");
     $("#my-video").append("<source src='http://sf.sycdn.kuwo.cn/resource/n2/35/0/169146886.mp3' type='audio/mpeg'>");
@@ -64,8 +65,28 @@ function playvideo(btName) {
         video.play();
     })
 }
-function speed(spe){
+
+function speed(spe) {
     var video = document.getElementById('my-video');
-     video.playbackRate = spe;
+    video.playbackRate = spe;
     video.play();
+}
+
+//用于通过文件名设置文件属性
+function judgeType(fileName, videoType) {
+
+    if (fileName.match(".mp3") != null) {
+        videoType = "audio/mpeg";
+    } else if (fileName.match(".ogg") != null || fileName.match(".Ogg") != null) {
+        videoType = "audio/ogg";
+    } else if (fileName.match(".Wav") != null || fileName.match(".wav") != null) {
+        videoType = "audio/wav";
+    } else if (fileName.match(".MP4") != null || fileName.match(".mp4") != null) {
+        videoType = "video/mp4";
+    } else if (fileName.match(".MP4") != null || fileName.match(".mp4") != null) {
+        videoType = "video/mp4";
+    } else {
+        alert("暂不支持改音频格式");
+        return false;
+    }
 }

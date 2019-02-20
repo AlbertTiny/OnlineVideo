@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boot.zhiyi.mapper.TecentMapper">
+	<insert id="addTecent" parameterType="com.boot.zhiyi.Po.TecentPo">
+  insert into tecelent(name, url) values(#{name}, #{url})
+</insert>
+
+<select id="judgeTectnetByName" parameterType="String" resultType="com.boot.zhiyi.Po.TecentPo">
+	select * from tecelent 
+	where name LIKE CONCAT(CONCAT('%',#{name}),'%')
+</select>
+
+<select id="getTecent"  resultType="com.boot.zhiyi.Po.TecentPo">
+	select * from tecelent 
+</select>
+</mapper>

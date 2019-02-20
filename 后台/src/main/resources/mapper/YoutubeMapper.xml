@@ -11,4 +11,8 @@
 <select id="getYoutube"  resultType="com.boot.zhiyi.Po.Youtube">
 	select * from youtube 
 </select>
+<select id="getYoutubeLikeName"  parameterType="String" resultType="com.boot.zhiyi.Po.Youtube">
+	select * from youtube 
+	where name LIKE CONCAT(CONCAT('%',#{name}),'%')
+</select>
 </mapper>

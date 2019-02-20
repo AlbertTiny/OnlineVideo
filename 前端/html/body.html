@@ -43,6 +43,9 @@
     <link rel="stylesheet" href="../css/body.css" />
     <!--引入显示youtube列表的插件-->
     <script src="../js/showYoutubube.js"></script>
+    <!--引入显示腾讯视频列表的插件-->
+    <script src="../js/showTecent.js"></script>
+
     <style>
         body {
             background: url(../img/background_login.jpg);
@@ -55,6 +58,7 @@
 </head>
 
 <body>
+
     <!-- 在线翻译的模态框 -->
     <div class="modal fade" id="changeVideoModel_Translate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -116,11 +120,13 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <form class="navbar-form navbar-left" action="http://localhost:1234/zhiyi/forward" target="_blank">
+                    <form class="navbar-form navbar-left" target="_blank">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="暂不支持中文搜索" id="input_search" name="input_search">
+                            <input type="text" class="form-control" placeholder="输入搜索内容" id="input_search" name="input_search">
                         </div>
-                        <button type="submit" class="btn btn-default" id="search">Submit</button>
+                        <button type="submit" class="btn btn-default" id="search" onclick="SearchBaiDu(event)">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            百度</button>
                     </form>
                     <ul class="nav navbar-nav navbar-center">
                         <li class="dropdown">
@@ -175,6 +181,9 @@
                             <a href="../文件上传/bootstrap-fileinput-master/html/inde.html" id="upload"><i class="fa fa-fw fa-file-o"></i> 视频上传</a>
                         </li>
                         <li>
+                            <a href="#" id="chooseLocal"><i class="fa fa-fw fa-file-o"></i> 选择本地音频</a>
+                        </li>
+                        <li>
                             <a href="#" id="download"><i class="fa fa-fw fa-cog"></i> 视频下载</a>
                         </li>
                         <li class="dropdown">
@@ -182,23 +191,29 @@
                     选择视频 <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li class="dropdown-header">Dropdown heading</li>
+                                <li><a href="#" id="YoutubeVideo">优酷视频</a></li>
+                                <li><a href="#" id="TecentVideo">腾讯视频</a></li>
                                 <li><a href="#" id="cartoon">动画片</a></li>
                                 <li><a href="#" id="English">英语</a></li>
                                 <li><a href="#" id="guns">guns系列教程</a></li>
                                 <li><a href="#" id="advertise">广告宣传</a></li>
                                 <li><a href="#" id="movies">电影</a></li>
                                 <li><a href="#" id="music">音频</a></li>
-                                <li><a href="#" id="YoutubeVideo">优酷视频</a></li>
+
                             </ul>
                         </li>
-                        <li>
-                            <a href="#" id="crawYoutube"><i class="fa fa-fw fa-bank"></i>爬取优酷视频</a>
-                        </li>
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>
                                更多功能 <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li class="dropdown-header">Dropdown heading</li>
+                                <li>
+                                    <a href="#" id="crawYoutube"><i class="fa fa-fw fa-bank"></i>爬取优酷视频</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="crawTecent"><i class="fa fa-fw fa-bank"></i>爬取腾讯视频</a>
+                                </li>
                                 <li><a href="http://localhost:1234/zhiyi/druid" id="durid" target="_blank"><i class="fa fa-fw fa-bank"></i>查看durid连接情况</a></li>
                                 <li><a href="#" id="otherTools"><i class="fa fa-fw fa-bank"></i>关于我们</a></li>
 
@@ -231,7 +246,7 @@
     </div>
     <div class="box-center-right" id="right">
 
-        <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls preload="auto" poster="../img/Poster1.jpg" data-setup="{}">
+        <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls preload="auto" poster="../img/Poster2.jpg" data-setup="{}">
             <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/mp4'>
             <source src="http://sf.sycdn.kuwo.cn/resource/n2/35/0/169146886.mp3" type="audio/mpeg">
             <source src="OggAudio" type='audio/ogg'>
@@ -244,10 +259,81 @@
                 <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
             </p>
         </video>
+
     </div>
+
+    <input type="file" id="fileInput" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;" />
 </body>
 <script src="../js/function.js"></script>
 <script src="../js/util.js"></script>
+<script>
+    //触发选择音频事件
+    $("#chooseLocal").click(function() {
+            //触发 文件选择的click事件
+            $("#right").empty();
+            addVideo();
+            $("#right").append("<div id='Alert'></div>");
+            $("#fileInput").trigger("click");
+            $("#fileInput").change(function() {
+
+                var file = document.getElementById('fileInput').files[0];
+                var fileName = file.name;
+                var videoType;
+                judgeType(fileName, videoType);
+                // console.log(subname);
+                var url = URL.createObjectURL(file);
+                chageVideoResource("my-video", videoType, url, url);
+                $("#Alert").empty();
+                $("#Alert").append("<div class='alert alert-success well' role='alert'>当前播放内容：" + fileName + "</div>");
+            })
+        })
+        //用于实现爬取资源的功能
+    function crawVideo(idName, url) {
+        $("#" + idName).click(function() {
+            $.ajax({
+                url: url,
+                type: "get",
+                success: function(data) {
+                    var dialog = bootbox.dialog({
+                        title: '致一传媒提示您：',
+                        message: '<p><i class="fa fa-spin fa-spinner"></i>资源爬取中...</p>'
+                    });
+                    dialog.init(function() {
+                        setTimeout(function() {
+                            dialog.find('.bootbox-body').html('资源爬取完毕-------共新增视频【' + data.insertNumber + "】条数据");
+                        }, 3000);
+                    });
+                },
+                error: function() {
+                    alert("资源爬取失败")
+                }
+            });
+        })
+    }
+
+    function SearchBaiDu(e) {
+
+        var value = $("#input_search").val();
+        var patt1 = new RegExp(/\s+/g); //判断空格的正则表达式
+        if (value == '' || value == null || patt1.test(value)) {
+            bootbox.prompt("请输入查询内容", function(result) {
+                if (result == null || result == "" || patt1.test(result)) {
+                    e.preventDefault();
+
+                } else {
+                    window.open("https://www.baidu.com/s?tn=mswin_oem_dg&ie=utf-8&wd=" + result, "_blank");
+                }
+
+
+            });
+            e.preventDefault();
+            return false;
+        }
+        window.open("https://www.baidu.com/s?tn=mswin_oem_dg&ie=utf-8&wd=" + value, "_blank");
+
+        e.preventDefault();
+    }
+</script>
 <script>
     var videoTep;
     //用于弹出在线翻译模态框
@@ -343,29 +429,18 @@
             speed(spe)
         })
         //用于实现爬取优酷视频
-    $("#crawYoutube").click(function() {
-            $.ajax({
-                url: "http://localhost:1234/zhiyi/saveYoutube",
-                type: "get",
-                success: function(data) {
-                    var dialog = bootbox.dialog({
-                        title: '致一传媒提示您：',
-                        message: '<p><i class="fa fa-spin fa-spinner"></i>资源爬取中...</p>'
-                    });
-                    dialog.init(function() {
-                        setTimeout(function() {
-                            dialog.find('.bootbox-body').html('资源爬取完毕-------共新增视频【' + data.insertNumber + "】条数据");
-                        }, 3000);
-                    });
-                },
-                error: function() {
-                    alert("资源爬取失败")
-                }
-            });
-        })
-        //显示优酷视频播放列表
+    crawVideo("crawYoutube", "http://localhost:1234/zhiyi/saveYoutube");
+    //用于实现爬取腾讯视频视频
+    crawVideo("crawTecent", "http://localhost:1234/zhiyi/saveTecent");
+
+    //显示优酷视频播放列表
     $("#YoutubeVideo").click(function() {
-        showYoutubeList();
+        showYoutubeList(1);
+    })
+
+    //显示腾讯视频播放列表
+    $("#TecentVideo").click(function() {
+        showTecentList(1);
     })
 </script>
 

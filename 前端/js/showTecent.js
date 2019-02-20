@@ -1,5 +1,5 @@
 //用于打开视频选择界面
-function showYoutubeList(pn) {
+function showTecentList(pn) {
     //用于打开卡通模态框
     //此处弹出模态框
     var currentPageNumber;
@@ -7,7 +7,7 @@ function showYoutubeList(pn) {
     var searchValue;
     var selectValue;
     $.ajax({
-        url: "http://localhost:1234/zhiyi/getYoutube",
+        url: "http://localhost:1234/zhiyi/getTecent",
         data: "pn=" + pn,
         type: "get",
         success: function(data) {
@@ -70,14 +70,14 @@ function showYoutubeList(pn) {
     });
     $(document).on("click", "#pnNu", function() {
         var pn = $(this).attr("data-pn");
-        showYoutubeList(pn)
+        showTecentList(pn)
     })
     $(document).on("click", "#previous", function() {
         var pn = currentPageNumber - 1;
         if (pn <= 0) {
             return false;
         } else {
-            showYoutubeList(pn)
+            showTecentList(pn)
         }
     })
     $(document).on("click", "#next", function() {
@@ -85,7 +85,7 @@ function showYoutubeList(pn) {
             if (pn > allPages) {
                 return false;
             } else {
-                showYoutubeList(pn)
+                showTecentList(pn)
             }
         })
         //获取输入框中的值
@@ -97,12 +97,12 @@ function showYoutubeList(pn) {
             selectValue = $(this).val();
             if (selectValue == 'pnSearch') {
                 $(document).on("click", "#btnSearch", function() {
-                    showYoutubeList(searchValue);
+                    showTecentList(searchValue);
                 })
             } else if (selectValue == 'nameSearch') {
                 $(document).on("click", "#btnSearch", function() {
                     $.ajax({
-                        url: "http://localhost:1234/zhiyi/getYoutubeByName",
+                        url: "http://localhost:1234/zhiyi/getTecentByName",
                         data: "name=" + searchValue,
                         type: "get",
                         success: function(data) {
@@ -129,6 +129,6 @@ function showYoutubeList(pn) {
         })
         //返回原来界面
     $(document).on("click", "#searchHome", function() {
-        showYoutubeList(1)
+        showTecentList(1)
     })
 }
